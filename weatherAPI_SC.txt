@@ -1,0 +1,34 @@
+package weatherAPI;
+
+import java.text.DecimalFormat;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+public class Weather_API_Program {
+
+	public static void main(String[] args) throws Exception {
+		
+		String uri = "http://api.openweathermap.org/data/2.5/weather?q=Berlin,DE&mode=xml&APPID=ef736066f9599e3640fc037f874b666d";
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+		Document document = documentBuilder.parse(uri);
+		
+		NodeList temperatures = document.getElementsByTagName("temperature");
+		Node temperature = temperatures.item(0);
+		NamedNodeMap timeAttributes = temperature.getAttributes();
+		String temperatureCall = timeAttributes.getNamedItem("value").getNodeValue();
+		float tempInKelvin = Float.parseFloat(temperatureCall);
+		float tempInDegreeCelsius = tempInKelvin- 273.15f;
+		
+		DecimalFormat df = new DecimalFormat("#.##");
+		
+		System.out.println("The temperature in .... is "+ df.format(tempInDegreeCelsius) + " °C.");
+	}
+
+}
